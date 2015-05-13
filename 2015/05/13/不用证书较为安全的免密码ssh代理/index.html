@@ -6,6 +6,8 @@
   <title>不用证书较为安全的免密码ssh代理 | Numbers Link</title>
   <meta name="author" content="Line">
   
+  <meta name="description" content="新建一个低权限账号：-M -s-n vpn01```1&amp;#36825;&amp;#20010;&amp;#36134;&amp;#21495;&amp;#21482;&amp;#33021;&amp;#29992;&amp;#26469;ssh&amp;#36830;&amp;#25509;&amp;#26080;&amp;#30331;&amp;#24405;&amp;#26435;&amp;#38480;">
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -58,13 +60,27 @@
     </header>
     <div class="entry">
       
-        
+        <h2 id="新建一个低权限账号：">新建一个低权限账号：</h2><figure class="highlight"><figcaption><span>-M -s</span><a href="/sbin/nologin">-n vpn01```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#36825;&#20010;&#36134;&#21495;&#21482;&#33021;&#29992;&#26469;ssh&#36830;&#25509;&#26080;&#30331;&#24405;&#26435;&#38480;.&#10; &#10;## &#28165;&#38500;&#36825;&#20010;&#36134;&#21495;&#30340;&#23494;&#30721;</span><br></pre></td></tr></table></figure>
+<p>cat /etc/passwd<br>vpn01:!!:16341:0:99999:7:::<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">删掉那两个</span><br><span class="line"> </span><br><span class="line"><span class="preprocessor">##  修改sshd 配置</span></span><br></pre></td></tr></table></figure></p>
+<p>/etc/ssh/sshd_config:<br>PermitEmptyPassw0rds yes<br>/etc/ini.d/sshd restart</p>
+<p>cat /etc/ssh/sshd_config | grep Gate<br>GatewayPorts yes<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="comment">## 客户端执行:</span></span><br><span class="line"> ``` ssh.exe -N -p  <span class="number">22</span> -g -C -c <span class="number">3</span>des -o <span class="variable">StrictHostKeyChecking=</span>no -o <span class="variable">TCPKeepAlive=</span>yes -o <span class="variable">ServerAliveInterval=</span><span class="number">30</span> vpn01@avalon.pw -R <span class="number">3388</span>:localhost:<span class="number">3389</span></span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>) 如果你需要在本地打开一个代理端口可以使用<br><code>ssh -v -v -N -p 22 -g -C -c 3des vpn01@avalon.pw -D 0.0.0.0:1080</code></li>
+<li>) 如果你需要将3388端口绑定到非localhost 你需要：</li>
+</ol>
+<p>这样你就把本地的3389 端口映射到服务器的3388端口了。</p>
+
       
     </div>
     <footer>
       
         
         
+  
+  <div class="tags">
+    <a href="/tags/ssh/">ssh</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -119,6 +135,17 @@
   
 
   
+<div class="widget tag">
+  <h3 class="title">標籤</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/golang/">golang</a><small>1</small></li>
+  
+    <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
+  
+  </ul>
+</div>
+
 </aside>
     <div class="clearfix"></div>
   </div>

@@ -6,6 +6,11 @@
   <title>交叉编译 | Numbers Link</title>
   <meta name="author" content="Line">
   
+  <meta name="description" content="Linux先执行一次生成目标系统相应的库：
+12cd $GOROOT/srcCGO_ENABLED=0 GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] ./make.bash
+比如：编译32位windows程序
+12cd $GOROOT/src">
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -58,13 +63,28 @@
     </header>
     <div class="entry">
       
-        
+        <h2 id="Linux">Linux</h2><p>先执行一次生成目标系统相应的库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOROOT</span>/src</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=[ linux | windows ... ] GOARCH=[ amd64 | <span class="number">386</span> ] ./make.bash</span><br></pre></td></tr></table></figure>
+<p>比如：<br>编译32位windows程序</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $GOROOT/src</span><br><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>windows  <span class="variable">GOARCH=</span><span class="number">386</span>  ./make.bash</span><br></pre></td></tr></table></figure>
+<p>以后编译的时候用：<br><figure class="highlight"><figcaption><span>GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] go build * ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;&#27604;&#22914;&#65306;&#10;``` CGO_ENABLED=0 GOOS=windows GOARCH=386  go build *</span><br></pre></td></tr></table></figure></p>
+<p>注1：这种方式不支持CGO</p>
+<h2 id="Windows">Windows</h2><p>下面以在windows64下生成windows32程序为例<br>生成目标系统相关的库<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="envvar">%GOROOT%</span>/src</span><br><span class="line"><span class="keyword">set</span> CGO_ENABLED=<span class="number">0</span></span><br><span class="line"><span class="keyword">set</span> GOOS=windows</span><br><span class="line"><span class="keyword">set</span> GOARCH=<span class="number">386</span></span><br><span class="line"><span class="flow">call</span> make.bat</span><br></pre></td></tr></table></figure></p>
+<p>要编译的时候保证环境变量里有下面的环境变量就行：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">CGO_ENABLED=<span class="value"><span class="number">0</span></span></span></span><br><span class="line"><span class="setting">GOOS=<span class="value">windows</span></span></span><br><span class="line"><span class="setting">GOARCH=<span class="value"><span class="number">386</span></span></span></span><br></pre></td></tr></table></figure>
+<p>注1: 需要mingw环境<br>golang 下各种OS各种架构应该是可以互相交叉编译，只试了linux， windows其它没测。 </p>
+
       
     </div>
     <footer>
       
         
         
+  
+  <div class="tags">
+    <a href="/tags/golang/">golang</a>
+  </div>
+
         
   <div class="addthis addthis_toolbox addthis_default_style">
     
@@ -119,6 +139,17 @@
   
 
   
+<div class="widget tag">
+  <h3 class="title">標籤</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/golang/">golang</a><small>1</small></li>
+  
+    <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
+  
+  </ul>
+</div>
+
 </aside>
     <div class="clearfix"></div>
   </div>

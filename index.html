@@ -59,7 +59,16 @@
     </header>
     <div class="entry">
       
-        
+        <h2 id="新建一个低权限账号：">新建一个低权限账号：</h2><figure class="highlight"><figcaption><span>-M -s</span><a href="/sbin/nologin">-n vpn01```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#36825;&#20010;&#36134;&#21495;&#21482;&#33021;&#29992;&#26469;ssh&#36830;&#25509;&#26080;&#30331;&#24405;&#26435;&#38480;.&#10; &#10;## &#28165;&#38500;&#36825;&#20010;&#36134;&#21495;&#30340;&#23494;&#30721;</span><br></pre></td></tr></table></figure>
+<p>cat /etc/passwd<br>vpn01:!!:16341:0:99999:7:::<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">删掉那两个</span><br><span class="line"> </span><br><span class="line"><span class="preprocessor">##  修改sshd 配置</span></span><br></pre></td></tr></table></figure></p>
+<p>/etc/ssh/sshd_config:<br>PermitEmptyPassw0rds yes<br>/etc/ini.d/sshd restart</p>
+<p>cat /etc/ssh/sshd_config | grep Gate<br>GatewayPorts yes<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="comment">## 客户端执行:</span></span><br><span class="line"> ``` ssh.exe -N -p  <span class="number">22</span> -g -C -c <span class="number">3</span>des -o <span class="variable">StrictHostKeyChecking=</span>no -o <span class="variable">TCPKeepAlive=</span>yes -o <span class="variable">ServerAliveInterval=</span><span class="number">30</span> vpn01@avalon.pw -R <span class="number">3388</span>:localhost:<span class="number">3389</span></span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>) 如果你需要在本地打开一个代理端口可以使用<br><code>ssh -v -v -N -p 22 -g -C -c 3des vpn01@avalon.pw -D 0.0.0.0:1080</code></li>
+<li>) 如果你需要将3388端口绑定到非localhost 你需要：</li>
+</ol>
+<p>这样你就把本地的3389 端口映射到服务器的3388端口了。</p>
+
       
     </div>
     <footer>
@@ -92,7 +101,17 @@
     </header>
     <div class="entry">
       
-        
+        <h2 id="Linux">Linux</h2><p>先执行一次生成目标系统相应的库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOROOT</span>/src</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=[ linux | windows ... ] GOARCH=[ amd64 | <span class="number">386</span> ] ./make.bash</span><br></pre></td></tr></table></figure>
+<p>比如：<br>编译32位windows程序</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $GOROOT/src</span><br><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>windows  <span class="variable">GOARCH=</span><span class="number">386</span>  ./make.bash</span><br></pre></td></tr></table></figure>
+<p>以后编译的时候用：<br><figure class="highlight"><figcaption><span>GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] go build * ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;&#27604;&#22914;&#65306;&#10;``` CGO_ENABLED=0 GOOS=windows GOARCH=386  go build *</span><br></pre></td></tr></table></figure></p>
+<p>注1：这种方式不支持CGO</p>
+<h2 id="Windows">Windows</h2><p>下面以在windows64下生成windows32程序为例<br>生成目标系统相关的库<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="envvar">%GOROOT%</span>/src</span><br><span class="line"><span class="keyword">set</span> CGO_ENABLED=<span class="number">0</span></span><br><span class="line"><span class="keyword">set</span> GOOS=windows</span><br><span class="line"><span class="keyword">set</span> GOARCH=<span class="number">386</span></span><br><span class="line"><span class="flow">call</span> make.bat</span><br></pre></td></tr></table></figure></p>
+<p>要编译的时候保证环境变量里有下面的环境变量就行：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">CGO_ENABLED=<span class="value"><span class="number">0</span></span></span></span><br><span class="line"><span class="setting">GOOS=<span class="value">windows</span></span></span><br><span class="line"><span class="setting">GOARCH=<span class="value"><span class="number">386</span></span></span></span><br></pre></td></tr></table></figure>
+<p>注1: 需要mingw环境<br>golang 下各种OS各种架构应该是可以互相交叉编译，只试了linux， windows其它没测。 </p>
+
       
     </div>
     <footer>
@@ -202,6 +221,17 @@
   
 
   
+<div class="widget tag">
+  <h3 class="title">標籤</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/golang/">golang</a><small>1</small></li>
+  
+    <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
+  
+  </ul>
+</div>
+
 </aside>
     <div class="clearfix"></div>
   </div>
