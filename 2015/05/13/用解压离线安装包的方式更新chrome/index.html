@@ -3,18 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>交叉编译 | Numbers Link</title>
+  <title>用解压离线安装包的方式更新chrome | Numbers Link</title>
   <meta name="author" content="Line">
   
-  <meta name="description" content="Linux先执行一次生成目标系统相应的库：
-12cd $GOROOT/srcCGO_ENABLED=0 GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] ./make.bash
-比如：编译32位windows程序
-12cd $GOROOT/src">
+  <meta name="description" content="昨天用离线安装包自动更新chrome 没有成功（40.0-&amp;gt;42 )， 于是尝试手动更新。
+
+下载 离线安装包在搜索引擎上搜 “chrome 42 离线安装包“ 即可
+
+用7zip 解压
+
+继续解压
+
+
+
+最后得到
+
+找到chrome.exe 的位置我的是在C:\Program Files (">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="交叉编译"/>
+  <meta property="og:title" content="用解压离线安装包的方式更新chrome"/>
   <meta property="og:site_name" content="Numbers Link"/>
 
   
@@ -53,26 +62,34 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2015-05-13T03:50:19.000Z"><a href="/2015/05/13/交叉编译/">2015-05-13</a></time>
+        <time datetime="2015-05-13T06:45:46.000Z"><a href="/2015/05/13/用解压离线安装包的方式更新chrome/">2015-05-13</a></time>
       
       
   
-    <h1 class="title">交叉编译</h1>
+    <h1 class="title">用解压离线安装包的方式更新chrome</h1>
   
 
     </header>
     <div class="entry">
       
-        <h2 id="Linux">Linux</h2><p>先执行一次生成目标系统相应的库：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOROOT</span>/src</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=[ linux | windows ... ] GOARCH=[ amd64 | <span class="number">386</span> ] ./make.bash</span><br></pre></td></tr></table></figure>
-<p>比如：<br>编译32位windows程序</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $GOROOT/src</span><br><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>windows  <span class="variable">GOARCH=</span><span class="number">386</span>  ./make.bash</span><br></pre></td></tr></table></figure>
-<p>以后编译的时候用：<br><figure class="highlight"><figcaption><span>GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] go build * ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;&#27604;&#22914;&#65306;&#10;``` CGO_ENABLED=0 GOOS=windows GOARCH=386  go build *</span><br></pre></td></tr></table></figure></p>
-<p>注1：这种方式不支持CGO</p>
-<h2 id="Windows">Windows</h2><p>下面以在windows64下生成windows32程序为例<br>生成目标系统相关的库<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="envvar">%GOROOT%</span>/src</span><br><span class="line"><span class="keyword">set</span> CGO_ENABLED=<span class="number">0</span></span><br><span class="line"><span class="keyword">set</span> GOOS=windows</span><br><span class="line"><span class="keyword">set</span> GOARCH=<span class="number">386</span></span><br><span class="line"><span class="flow">call</span> make.bat</span><br></pre></td></tr></table></figure></p>
-<p>要编译的时候保证环境变量里有下面的环境变量就行：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">CGO_ENABLED=<span class="value"><span class="number">0</span></span></span></span><br><span class="line"><span class="setting">GOOS=<span class="value">windows</span></span></span><br><span class="line"><span class="setting">GOARCH=<span class="value"><span class="number">386</span></span></span></span><br></pre></td></tr></table></figure>
-<p>注1: 需要mingw环境<br>golang 下各种OS各种架构应该是可以互相交叉编译，只试了linux， windows其它没测。 </p>
+        <ol>
+<li><p>昨天用离线安装包自动更新chrome 没有成功（40.0-&gt;42 )， 于是尝试手动更新。</p>
+</li>
+<li><p>下载 离线安装包<br>在搜索引擎上搜 “chrome 42 离线安装包“ 即可</p>
+</li>
+<li><p>用7zip 解压<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-30_10-30-03.png" alt=""></p>
+</li>
+<li><p>继续解压<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-30_10-32-21.png" alt=""></p>
+</li>
+</ol>
+<ol>
+<li><p>最后得到<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-30_10-33-35.png" alt=""></p>
+</li>
+<li><p>找到chrome.exe 的位置<br>我的是在C:\Program Files (x86)\Google\Chrome\Application。将上一步得到的两个文件夹拷贝过去， chrome.exe 覆盖</p>
+</li>
+<li><p>重启机器，大功告成！</p>
+</li>
+</ol>
 
       
     </div>
@@ -82,7 +99,7 @@
         
   
   <div class="tags">
-    <a href="/tags/golang/">golang</a>
+    <a href="/tags/chrome/">chrome</a>
   </div>
 
         
