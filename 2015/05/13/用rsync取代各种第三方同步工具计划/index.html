@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>用rsync取代各种第三方同步工具计划 | Numbers Link</title>
+  <meta name="author" content="Line">
+  
+  <meta name="description" content="为什么？
+同步冲突无法解决 vs 灵活覆盖规则由于第三方同步软件基于最近修改时间，为最新副本的自动同步规则，不够灵活，很容易造成冲突。就像下面这样。 使用rsync我们可以指定哪个副本为最新，哪个可以丢弃。
+实时自动同步 vs 手工同步第三方同步软件，在发现文件一发生修改后，就会马上进行同步，这不仅">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="用rsync取代各种第三方同步工具计划"/>
+  <meta property="og:site_name" content="Numbers Link"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Numbers Link" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Numbers Link</a></h1>
+  <h2><a href="/">Links Up!</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-05-13T06:49:46.000Z"><a href="/2015/05/13/用rsync取代各种第三方同步工具计划/">2015-05-13</a></time>
+      
+      
+  
+    <h1 class="title">用rsync取代各种第三方同步工具计划</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="为什么？">为什么？</h2><ol>
+<li>同步冲突无法解决 vs 灵活覆盖规则<br>由于第三方同步软件基于最近修改时间，为最新副本的自动同步规则，不够灵活，很容易造成冲突。就像下面这样。 使用rsync我们可以指定哪个副本为最新，哪个可以丢弃。<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-22_12-03-36.png" alt=""></li>
+<li>实时自动同步 vs 手工同步<br>第三方同步软件，在发现文件一发生修改后，就会马上进行同步，这不仅耗有限的带宽，还消耗内存，CPU及续航。rsync则可以避免这些问题。</li>
+<li>放在别人服务器上 vs 放在自己的服务器上<br>使用第三方同步软件，需要将您的文件上传到他们的服务器上。看起来不太安全。用rsync， 服务器是自己的， 传输走ssh。<h2 id="麻烦事">麻烦事</h2></li>
+<li>要学习一些geekly things，<br>rsync 是个强大的linux 命令行工具，使用可能没有windows程序习惯。</li>
+<li>手工同步<br>现在同步要手工作做了。是有点麻烦。</li>
+<li>大文件如果一次同步没那么快<br>如果文件多了，一次同步，可能没有实时同步快。</li>
+</ol>
+<h2 id="基础使用">基础使用</h2><ol>
+<li>本地两文件夹互相同步<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rsync -zvrt -<span class="built_in">delete</span> <span class="comment">--progress Apps/ /e/Apps</span></span><br><span class="line">rsync -zvrt -<span class="built_in">delete</span> <span class="comment">--progress /e/Apps/ Apps/</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>t</strong>: 同步时，保证两边时间戳一样<br><strong>z</strong>: 同步时使用压缩<br><strong>v</strong>: 罗嗦模式<br><strong>r</strong>: 递归同步<br><strong>-delete</strong>: 同步本地已经删除文件<br><strong>—progress</strong>: 显示进度</p>
+<ol>
+<li>本地同步远程 &amp;&amp; 远程同步到本地<br>在根目录前加host就行 syn@comip.chinatcc.com:2074<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -zvrt -delete --progress Apps/ syn@comip<span class="class">.chinatcc</span><span class="class">.com</span>:<span class="number">2074</span>/e/Apps</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="典型用法">典型用法</h2><ol>
+<li><p>backup</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -zvrt --delete -e <span class="string">'ssh -p 2074'</span> --progress Apps/ syn@comip<span class="class">.chinatcc</span><span class="class">.com</span>:~/Apps</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>recover</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -zvrt --<span class="keyword">delete</span> -e <span class="string">'ssh -p 2074'</span> --progress syn<span class="property">@comip</span>.chinatcc.<span class="attribute">com</span>:~<span class="regexp">/Apps/</span> Apps/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ignore updated and recover</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -zvrt --<span class="keyword">delete</span> -e -u <span class="string">'ssh -p 2074'</span> --progress syn<span class="property">@comip</span>.chinatcc.<span class="attribute">com</span>:~<span class="regexp">/Apps/</span> Apps/</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意1: 这里~/Apps 跟~/App/ 的意义是不一样的。 ~/Apps 指从Apps这个文件夹开始同步包含这个Apps这个目录， ~/Apps/ 指的是从Apps这个文件的子文件夹开始同步， 不包含这个目录。</p>
+<h2 id="同步模型">同步模型</h2><ol>
+<li>when arrive at office:<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">work</span> <span class="comment">pc</span> &lt;<span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="comment">recover</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">FileServer</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>or<br>doing some emerge things, and some files of work pc may change,<br>to discard changes:<br><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">work</span> <span class="comment">pc</span> &lt;<span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="comment">recover</span> <span class="comment">from</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">FileServer</span></span><br></pre></td></tr></table></figure></p>
+<p>to save changes:<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">work <span class="keyword">pc</span> &lt;---ignore updated <span class="built_in">and</span> <span class="keyword">recover</span> from--- FileServer</span><br></pre></td></tr></table></figure></p>
+<p>注1: 这种情况下如果工作电脑上的文件，昨天晚上在家里的PC也修改过那家中的修改就只能被丢弃。<br>注2: 这种逻辑在回家后的流程类似不多写。</p>
+<ol>
+<li><p>befor leaving office</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">work pc -&gt; <span class="constant">FileServer</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>when arrive home</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">home</span> <span class="comment">pc</span> &lt;<span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="comment">recover</span> <span class="comment">from</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">FileServer</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>befor go to sleep</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">home</span> <span class="comment">pc</span> <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="comment">backup</span> <span class="comment">to</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">FileServer</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>有模型，我们基本实现了同步软件的功能的大部分功能。 如果你需要多版本功能支持，可以考虑，每天在server上将要同步的文件夹打包，然后做一个crontab每天备份，如果你还需要云端存储来保护你的数据，可以考虑将这个压缩包上传到云盘。担心隐私的话，打包的时候再加个密。</p>
+<h2 id="实用脚本">实用脚本</h2><p>利用上面的脚本我写了几个，脚本方便使用。脚本在<a href="https://github.com/linexjlin/rsync" target="_blank" rel="external">这里</a> 。注意替换相应路径，我用来同步平时用的几个小程序。这里面我使用了windows下的rsync，详细在项目有。 bat 脚本在wndows下使用，sh 脚本在linux 下使用。 </p>
+<p>使用截图：<br>下载后路径：<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-22_12-10-26.png" alt=""><br>开始同步：<br><img src="http://7xipka.com1.z0.glb.clouddn.com/2015-04-22_12-05-40.png" alt=""></p>
+<p>参考：<br><a href="http://os.51cto.com/art/201009/225962.htm" target="_blank" rel="external">http://os.51cto.com/art/201009/225962.htm</a><br><a href="http://zh.wikipedia.org/zh/Rsync" target="_blank" rel="external">http://zh.wikipedia.org/zh/Rsync</a><br><a href="http://baiqiuyi.com/linux/rsync-ssh-difference-port.html" target="_blank" rel="external">http://baiqiuyi.com/linux/rsync-ssh-difference-port.html</a></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/rsync/">rsync</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<script type="text/javascript">
+  var duoshuoQuery = {short_name: 'linxj' };
+  (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';
+      ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+<!-- Duoshuo Comment END -->
+
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.avalon.pw">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/chrome/">chrome</a><small>1</small></li>
+  
+    <li><a href="/tags/go/">go</a><small>2</small></li>
+  
+    <li><a href="/tags/rsync/">rsync</a><small>1</small></li>
+  
+    <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2015 Line
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

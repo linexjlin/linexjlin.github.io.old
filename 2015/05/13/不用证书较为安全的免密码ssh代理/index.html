@@ -6,7 +6,11 @@
   <title>不用证书较为安全的免密码ssh代理 | Numbers Link</title>
   <meta name="author" content="Line">
   
-  <meta name="description" content="新建一个低权限账号：-M -s-n vpn01```1&amp;#36825;&amp;#20010;&amp;#36134;&amp;#21495;&amp;#21482;&amp;#33021;&amp;#29992;&amp;#26469;ssh&amp;#36830;&amp;#25509;&amp;#26080;&amp;#30331;&amp;#24405;&amp;#26435;&amp;#38480;">
+  <meta name="description" content="新建一个低权限账号：1useradd -M -s /sbin/nologin -n vpn01
+这个账号只能用来ssh连接无登录权限.
+清除这个账号的密码12cat /etc/passwdvpn01:!!:16341:0:99999:7:::
+删掉那两个
+修改sshd 配置123456/etc/ss">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -60,15 +64,19 @@
     </header>
     <div class="entry">
       
-        <h2 id="新建一个低权限账号：">新建一个低权限账号：</h2><figure class="highlight"><figcaption><span>-M -s</span><a href="/sbin/nologin">-n vpn01```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#36825;&#20010;&#36134;&#21495;&#21482;&#33021;&#29992;&#26469;ssh&#36830;&#25509;&#26080;&#30331;&#24405;&#26435;&#38480;.&#10; &#10;## &#28165;&#38500;&#36825;&#20010;&#36134;&#21495;&#30340;&#23494;&#30721;</span><br></pre></td></tr></table></figure>
-<p>cat /etc/passwd<br>vpn01:!!:16341:0:99999:7:::<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">删掉那两个</span><br><span class="line"> </span><br><span class="line"><span class="preprocessor">##  修改sshd 配置</span></span><br></pre></td></tr></table></figure></p>
-<p>/etc/ssh/sshd_config:<br>PermitEmptyPassw0rds yes<br>/etc/ini.d/sshd restart</p>
-<p>cat /etc/ssh/sshd_config | grep Gate<br>GatewayPorts yes<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="comment">## 客户端执行:</span></span><br><span class="line"> ``` ssh.exe -N -p  <span class="number">22</span> -g -C -c <span class="number">3</span>des -o <span class="variable">StrictHostKeyChecking=</span>no -o <span class="variable">TCPKeepAlive=</span>yes -o <span class="variable">ServerAliveInterval=</span><span class="number">30</span> vpn01@avalon.pw -R <span class="number">3388</span>:localhost:<span class="number">3389</span></span><br></pre></td></tr></table></figure></p>
+        <h2 id="新建一个低权限账号：">新建一个低权限账号：</h2><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -<span class="keyword">M</span> -s /sbin/nologin -<span class="keyword">n</span> vpn01</span><br></pre></td></tr></table></figure>
+<p>这个账号只能用来ssh连接无登录权限.</p>
+<h2 id="清除这个账号的密码">清除这个账号的密码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/passwd</span><br><span class="line">vpn01:!!:<span class="number">16341</span>:<span class="number">0</span>:<span class="number">99999</span>:<span class="number">7</span>:::</span><br></pre></td></tr></table></figure>
+<p>删掉那两个</p>
+<h2 id="修改sshd_配置">修改sshd 配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/etc/ssh/sshd_config:</span><br><span class="line">PermitEmptyPassw0rds yes</span><br><span class="line">/etc/ini.d/sshd restart</span><br><span class="line"> </span><br><span class="line">cat /etc/ssh/sshd_config | grep Gate</span><br><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
+<h2 id="客户端执行:">客户端执行:</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh<span class="class">.exe</span> -N -<span class="tag">p</span>  <span class="number">22</span> -g -C -c <span class="number">3</span>des -o StrictHostKeyChecking=no -o TCPKeepAlive=yes -o ServerAliveInterval=<span class="number">30</span> vpn01@avalon<span class="class">.pw</span> -R <span class="number">3388</span>:localhost:<span class="number">3389</span></span><br></pre></td></tr></table></figure>
 <ol>
-<li>) 如果你需要在本地打开一个代理端口可以使用<br><code>ssh -v -v -N -p 22 -g -C -c 3des vpn01@avalon.pw -D 0.0.0.0:1080</code></li>
-<li>) 如果你需要将3388端口绑定到非localhost 你需要：</li>
+<li>如果你需要在本地打开一个代理端口可以使用</li>
 </ol>
-<p>这样你就把本地的3389 端口映射到服务器的3388端口了。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -v -v -N -<span class="tag">p</span> <span class="number">22</span> -g -C -c <span class="number">3</span>des vpn01@avalon<span class="class">.pw</span> -D <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">1080</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>如果你需要将3388端口绑定到非localhost 你需要：<br>这样你就把本地的3389 端口映射到服务器的3388端口了。</li>
+</ol>
 
       
     </div>
@@ -141,7 +149,9 @@
   
     <li><a href="/tags/chrome/">chrome</a><small>1</small></li>
   
-    <li><a href="/tags/golang/">golang</a><small>1</small></li>
+    <li><a href="/tags/go/">go</a><small>2</small></li>
+  
+    <li><a href="/tags/rsync/">rsync</a><small>1</small></li>
   
     <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
   

@@ -67,7 +67,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$GOROOT</span>/src</span><br><span class="line">CGO_ENABLED=<span class="number">0</span> GOOS=[ linux | windows ... ] GOARCH=[ amd64 | <span class="number">386</span> ] ./make.bash</span><br></pre></td></tr></table></figure>
 <p>比如：<br>编译32位windows程序</p>
 <figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $GOROOT/src</span><br><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>windows  <span class="variable">GOARCH=</span><span class="number">386</span>  ./make.bash</span><br></pre></td></tr></table></figure>
-<p>以后编译的时候用：<br><figure class="highlight"><figcaption><span>GOOS=[ linux | windows ... ] GOARCH=[ amd64 | 386 ] go build * ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;&#27604;&#22914;&#65306;&#10;``` CGO_ENABLED=0 GOOS=windows GOARCH=386  go build *</span><br></pre></td></tr></table></figure></p>
+<p>以后编译的时候用：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>[ linux | windows ... ] <span class="variable">GOARCH=</span>[ amd64 | <span class="number">386</span> ] go build *</span><br></pre></td></tr></table></figure></p>
+<p>比如：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">CGO_ENABLED=</span><span class="number">0</span> <span class="variable">GOOS=</span>windows <span class="variable">GOARCH=</span><span class="number">386</span>  go build *</span><br></pre></td></tr></table></figure></p>
 <p>注1：这种方式不支持CGO</p>
 <h2 id="Windows">Windows</h2><p>下面以在windows64下生成windows32程序为例<br>生成目标系统相关的库<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="envvar">%GOROOT%</span>/src</span><br><span class="line"><span class="keyword">set</span> CGO_ENABLED=<span class="number">0</span></span><br><span class="line"><span class="keyword">set</span> GOOS=windows</span><br><span class="line"><span class="keyword">set</span> GOARCH=<span class="number">386</span></span><br><span class="line"><span class="flow">call</span> make.bat</span><br></pre></td></tr></table></figure></p>
 <p>要编译的时候保证环境变量里有下面的环境变量就行：</p>
@@ -82,7 +83,7 @@
         
   
   <div class="tags">
-    <a href="/tags/golang/">golang</a>
+    <a href="/tags/go/">go</a>
   </div>
 
         
@@ -145,7 +146,9 @@
   
     <li><a href="/tags/chrome/">chrome</a><small>1</small></li>
   
-    <li><a href="/tags/golang/">golang</a><small>1</small></li>
+    <li><a href="/tags/go/">go</a><small>2</small></li>
+  
+    <li><a href="/tags/rsync/">rsync</a><small>1</small></li>
   
     <li><a href="/tags/ssh/">ssh</a><small>1</small></li>
   
